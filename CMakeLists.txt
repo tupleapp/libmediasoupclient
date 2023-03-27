@@ -130,7 +130,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 # Public (interface) dependencies.
 target_link_libraries(${PROJECT_NAME} PUBLIC
 	sdptransform
-	${LIBWEBRTC_BINARY_PATH}/libwebrtc${CMAKE_STATIC_LIBRARY_SUFFIX}
+	${LIBWEBRTC_BINARY_PATH}/${CMAKE_STATIC_LIBRARY_PREFIX}webrtc${CMAKE_STATIC_LIBRARY_SUFFIX}
 )
 
 # Compile definitions for libwebrtc.
