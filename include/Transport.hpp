@@ -34,8 +34,6 @@ namespace mediasoupclient
 			virtual void OnConnectionStateChange(Transport* transport, const std::string& connectionState) = 0;
 		};
 
-		virtual ~Transport() {};
-
 		/* Only child classes will create transport intances */
 	protected:
 		Transport(
