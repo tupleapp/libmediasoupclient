@@ -139,7 +139,7 @@ namespace mediasoupclient
 
 		MSC_WARN(
 		  "webrtc::PeerConnection::SetConfiguration failed [%s:%s]",
-		  webrtc::ToString(error.type()),
+		  webrtc::ToString(error.type()).data(),
 		  error.message());
 
 		return false;
