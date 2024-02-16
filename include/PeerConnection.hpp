@@ -6,7 +6,7 @@
 #include <future>                          // std::promise, std::future
 #include <memory>                          // std::unique_ptr
 
-#if !defined(NDEBUG) && !defined(DCHECK_ALWAYS_ON) && RTC_DCHECK_IS_ON
+#if defined(NDEBUG) && !defined(DCHECK_ALWAYS_ON) && RTC_DCHECK_IS_ON
 #error RTC dchecks are on implicitly; this will corrupt memory if WebRTC is compiled in a release build
 #endif
 
