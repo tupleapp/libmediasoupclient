@@ -7,8 +7,14 @@
 #include <api/audio_codecs/builtin_audio_decoder_factory.h>
 #include <api/audio_codecs/builtin_audio_encoder_factory.h>
 #include <api/create_peerconnection_factory.h>
-#include <api/video_codecs/builtin_video_decoder_factory.h>
-#include <api/video_codecs/builtin_video_encoder_factory.h>
+#include <api/video_codecs/video_decoder_factory.h>
+#include <api/video_codecs/video_decoder_factory_template.h>
+#include <api/video_codecs/video_decoder_factory_template_libvpx_vp8_adapter.h>
+#include <api/video_codecs/video_decoder_factory_template_libvpx_vp9_adapter.h>
+#include <api/video_codecs/video_encoder_factory.h>
+#include <api/video_codecs/video_encoder_factory_template.h>
+#include <api/video_codecs/video_encoder_factory_template_libvpx_vp8_adapter.h>
+#include <api/video_codecs/video_encoder_factory_template_libvpx_vp9_adapter.h>
 #include <rtc_base/ssl_adapter.h>
 
 using json = nlohmann::json;
@@ -61,6 +67,9 @@ namespace mediasoupclient
 		static std::once_flag f;
 		static rtc::scoped_refptr<webrtc::PeerConnectionFactoryInterface> sharedFactory;
 
+		using VideoEncoder = webrtc::VideoEncoderFactoryTemplate<webrtc::LibvpxVp8EncoderTemplateAdapter, webrtc::LibvpxVp9EncoderTemplateAdapter>;
+		using VideoDecoder = webrtc::VideoDecoderFactoryTemplate<webrtc::LibvpxVp8DecoderTemplateAdapter, webrtc::LibvpxVp9DecoderTemplateAdapter>;
+
 		std::call_once(f, [] {
 			rtc::Thread* networkThread   = rtc::Thread::CreateWithSocketServer().release();
 			rtc::Thread* signalingThread = rtc::Thread::Create().release();
@@ -82,8 +91,8 @@ namespace mediasoupclient
 				nullptr /*default_adm*/,
 				webrtc::CreateBuiltinAudioEncoderFactory(),
 				webrtc::CreateBuiltinAudioDecoderFactory(),
-				webrtc::CreateBuiltinVideoEncoderFactory(),
-				webrtc::CreateBuiltinVideoDecoderFactory(),
+				std::make_unique<VideoEncoder>(),
+				std::make_unique<VideoDecoder>(),
 				nullptr /*audio_mixer*/,
 				nullptr /*audio_processing*/
 			);
