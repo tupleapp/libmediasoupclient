@@ -752,8 +752,8 @@ namespace mediasoupclient
 		MSC_TRACE();
 	};
 
-	void RecvHandler::GetDtlsParameters(const std::string& id, const std::string& kind, const nlohmann::json* rtpParameters, DtlsParametersCallback callback) {
-		auto offer = RemoteOffer(id, kind, *rtpParameters);
+	void RecvHandler::GetDtlsParameters(const std::string& id, const std::string& streamId, const std::string& kind, const nlohmann::json* rtpParameters, DtlsParametersCallback callback) {
+		auto offer = RemoteOffer(id, streamId, kind, *rtpParameters);
 
 		assert(!this->initialOffer.has_value());
 		this->initialOffer = offer;
@@ -767,7 +767,7 @@ namespace mediasoupclient
 		});
 	}
 
-	struct RecvHandler::RemoteOffer RecvHandler::RemoteOffer(const std::string& id, const std::string& kind, const nlohmann::json& rtpParameters) {
+	struct RecvHandler::RemoteOffer RecvHandler::RemoteOffer(const std::string& id, const std::string& streamId, const std::string& kind, const nlohmann::json& rtpParameters) {
 		std::string localId;
 
 		// mid is optional, check whether it exists and is a non empty string.
@@ -777,9 +777,9 @@ namespace mediasoupclient
 		else
 			localId = std::to_string(this->mapMidTransceiver.size());
 
-		const auto& cname = rtpParameters["rtcp"]["cname"];
+		// const auto& cname = rtpParameters["rtcp"]["cname"];
 
-		this->remoteSdp->Receive(localId, kind, rtpParameters, cname, id);
+		this->remoteSdp->Receive(localId, kind, rtpParameters, streamId, id);
 
 		ConsumerRef consumer(id, kind, rtpParameters);
 
@@ -787,7 +787,7 @@ namespace mediasoupclient
 	}
 
 	RecvHandler::RecvResult RecvHandler::Receive(
-	  const std::string& id, const std::string& kind, const json* rtpParameters)
+	  const std::string& id, const std::string& streamId, const std::string& kind, const json* rtpParameters)
 	{
 		MSC_TRACE();
 
@@ -804,7 +804,7 @@ namespace mediasoupclient
 
 			this->initialOffer = {};
 		} else {
-			offer = RemoteOffer(id, kind, *rtpParameters);
+			offer = RemoteOffer(id, kind, *rtpParameters, streamId);
 
 			MSC_DEBUG("calling pc->setRemoteDescription():\n%s", offer.sdp.c_str());
 

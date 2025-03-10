@@ -237,12 +237,13 @@ namespace mediasoupclient
 		// Can be invoked before calling Consume to get DTLS parameters ahead of time; non-blocking.
 		//
 		// The next call to Consume should use the same arguments, otherwise an error will be thrown.
-		void GetDtlsParameters(const std::string& id, const std::string& kind, nlohmann::json* rtpParameters, Handler::DtlsParametersCallback);
+		void GetDtlsParameters(const std::string& id, const std::string& streamId, const std::string& kind, nlohmann::json* rtpParameters, Handler::DtlsParametersCallback);
 
 		Consumer* Consume(
 		  Consumer::Listener* consumerListener,
 		  const std::string& id,
 		  const std::string& producerId,
+		  const std::string& streamId,
 		  const std::string& kind,
 		  nlohmann::json* rtpParameters,
 		  const nlohmann::json& appData = nlohmann::json::object());

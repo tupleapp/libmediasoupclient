@@ -162,9 +162,9 @@ namespace mediasoupclient
 		  const nlohmann::json& sctpParameters,
 		  const PeerConnection::Options& peerConnectionOptions);
 
-		void GetDtlsParameters(const std::string& id, const std::string& kind, const nlohmann::json* rtpParameters, DtlsParametersCallback callback);
+		void GetDtlsParameters(const std::string& id, const std::string& streamId, const std::string& kind, const nlohmann::json* rtpParameters, DtlsParametersCallback callback);
 
-		RecvResult Receive(const std::string& id, const std::string& kind, const nlohmann::json* rtpParameters);
+		RecvResult Receive(const std::string& id, const std::string& streamId, const std::string& kind, const nlohmann::json* rtpParameters);
 		void StopReceiving(const std::string& localId);
 		void GetReceiverStats(const std::string& localId, PeerConnection::StatsHandler);
 		void RestartIce(const nlohmann::json& iceParameters) override;
@@ -197,7 +197,7 @@ namespace mediasoupclient
 			std::string sdp;
 		};
 
-		struct RemoteOffer RemoteOffer(const std::string& id, const std::string& kind, const nlohmann::json& rtpParameters);
+		struct RemoteOffer RemoteOffer(const std::string& id, const std::string& streamId, const std::string& kind, const nlohmann::json& rtpParameters);
 
 		std::optional<struct RemoteOffer> initialOffer;
 	};

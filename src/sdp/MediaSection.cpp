@@ -559,6 +559,8 @@ namespace mediasoupclient
 					std::string msid(streamId);
 					msid.append(" ").append(trackId);
 
+					this->mediaObject["msid"] = msid;
+
 					this->mediaObject["ssrcs"].push_back(
 					  { { "id", ssrc }, { "attribute", "cname" }, { "value", cname } });
 

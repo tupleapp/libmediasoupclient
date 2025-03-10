@@ -444,7 +444,7 @@ namespace mediasoupclient
 		Transport::SetHandler(this->recvHandler.get());
 	}
 
-	void RecvTransport::GetDtlsParameters(const std::string& id, const std::string& kind, nlohmann::json* rtpParameters, Handler::DtlsParametersCallback callback) {
+	void RecvTransport::GetDtlsParameters(const std::string& id, const std::string& streamId, const std::string& kind, nlohmann::json* rtpParameters, Handler::DtlsParametersCallback callback) {
 		MSC_TRACE();
 
 		if (this->closed)
@@ -458,7 +458,7 @@ namespace mediasoupclient
 		else if (!ortc::canReceive(*rtpParameters, *this->extendedRtpCapabilities))
 			MSC_THROW_UNSUPPORTED_ERROR("cannot consume this Producer");
 
-		this->recvHandler->GetDtlsParameters(id, kind, rtpParameters, callback);
+		this->recvHandler->GetDtlsParameters(id, streamId, kind, rtpParameters, callback);
 	}
 
 	/**
@@ -468,6 +468,7 @@ namespace mediasoupclient
 	  Consumer::Listener* consumerListener,
 	  const std::string& id,
 	  const std::string& producerId,
+	  const std::string& streamId,
 	  const std::string& kind,
 	  json* rtpParameters,
 	  const json& appData)
@@ -490,7 +491,7 @@ namespace mediasoupclient
 			MSC_THROW_UNSUPPORTED_ERROR("cannot consume this Producer");
 
 		// May throw.
-		auto recvResult = this->recvHandler->Receive(id, kind, rtpParameters);
+		auto recvResult = this->recvHandler->Receive(id, streamId, kind, rtpParameters);
 
 		auto* consumer = new Consumer(
 		  this,
@@ -516,7 +517,7 @@ namespace mediasoupclient
 				std::string probatorId{ "probator" };
 
 				// May throw.
-				auto result = this->recvHandler->Receive(probatorId, kind, &probatorRtpParameters);
+				auto result = this->recvHandler->Receive(probatorId, probatorId, kind, &probatorRtpParameters);
 
 				MSC_DEBUG("Consumer for RTP probation created");
 
