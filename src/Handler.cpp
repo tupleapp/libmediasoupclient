@@ -804,7 +804,7 @@ namespace mediasoupclient
 
 			this->initialOffer = {};
 		} else {
-			offer = RemoteOffer(id, kind, *rtpParameters, streamId);
+			offer = RemoteOffer(id, streamId, kind, *rtpParameters);
 
 			MSC_DEBUG("calling pc->setRemoteDescription():\n%s", offer.sdp.c_str());
 
